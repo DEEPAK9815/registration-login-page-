@@ -21,10 +21,7 @@ if (fs.existsSync(envPath)) {
 console.log(`[DEBUG] DB Config State: Host=${process.env.DB_HOST ? process.env.DB_HOST : 'UNSET'}, User=${process.env.DB_USER}, Port=${process.env.DB_PORT}`);
 
 if (!process.env.DB_HOST) {
-    console.error("FATAL ERROR: DB_HOST is not defined. The .env file is not loading correctly.");
-    console.error("Checked path:", envPath);
-    console.error("Please verify the file exists and contains DB_HOST.");
-    process.exit(1);
+    console.error("WARNING: DB_HOST is not defined. The .env file is not loading correctly. Database calls will fail.");
 }
 
 const pool = mysql.createPool({

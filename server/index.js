@@ -21,6 +21,7 @@ const bcrypt = require('bcryptjs');
 
 // Register Endpoint
 app.post('/api/register', async (req, res) => {
+    console.log("[API] /api/register called with body:", req.body);
     const { name, email, phone, password } = req.body;
 
     if (!name || !email || !phone || !password) {
