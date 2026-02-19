@@ -37,12 +37,16 @@ const init = async () => {
         await promisePool.query('SELECT 1');
         console.log("[INIT] Connection SUCCESS!");
 
-        console.log("[INIT] Creating 'users' table if not exists...");
+        console.log("[INIT] Dropping old 'users' table...");
+        await promisePool.query('DROP TABLE IF EXISTS users');
+
+        console.log("[INIT] Creating 'users' table...");
         const createTableQuery = `
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL UNIQUE,
                 email VARCHAR(255) NOT NULL UNIQUE,
+                phone VARCHAR(20) NOT NULL,
                 password VARCHAR(255) NOT NULL
             )
         `;

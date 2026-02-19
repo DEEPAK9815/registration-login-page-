@@ -21,10 +21,10 @@ const bcrypt = require('bcryptjs');
 
 // Register Endpoint
 app.post('/api/register', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, phone, password } = req.body;
 
-    if (!name || !email || !password) {
-        return res.status(400).json({ message: 'Name, email, and password are required' });
+    if (!name || !email || !phone || !password) {
+        return res.status(400).json({ message: 'Name, email, phone, and password are required' });
     }
 
     try {
@@ -37,7 +37,7 @@ app.post('/api/register', async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await db.query('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, hashedPassword]);
+        await db.query('INSERT INTO users (name, email, phone, password) VALUES (?, ?, ?, ?)', [name, email, phone, hashedPassword]);
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
         console.error(error);

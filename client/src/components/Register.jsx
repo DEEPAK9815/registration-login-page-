@@ -6,6 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Register = () => {
         e.preventDefault();
         setError('');
         try {
-            await axios.post('/api/register', { name, email, password });
+            await axios.post('/api/register', { name, email, phone, password });
             navigate('/login');
         } catch (err) {
             console.error("Registration Error:", err);
@@ -57,6 +58,14 @@ const Register = () => {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="glass-input"
+                    required
+                />
+                <input
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     className="glass-input"
                     required
                 />
