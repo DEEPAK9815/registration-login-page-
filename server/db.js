@@ -3,9 +3,22 @@ const mysql = require('mysql2');
 const path = require('path');
 const dotenv = require('dotenv');
 
-dotenv.config({ path: path.join(__dirname, '.env') });
+const fs = require('fs');
 
-console.log(`DB Config: Host=${process.env.DB_HOST}, User=${process.env.DB_USER}, Port=${process.env.DB_PORT}`);
+const envPath = path.join(__dirname, '.env');
+console.log(`[DEBUG] Attempting to load .env from: ${envPath}`);
+if (fs.existsSync(envPath)) {
+    const result = dotenv.config({ path: envPath });
+    if (result.error) {
+        console.error("[DEBUG] Error parsing .env:", result.error);
+    } else {
+        console.log("[DEBUG] .env loaded successfully.");
+    }
+} else {
+    console.error("[DEBUG] .env file NOT FOUND at:", envPath);
+}
+
+console.log(`[DEBUG] DB Config State: Host=${process.env.DB_HOST ? 'Set' : 'Unset'}, User=${process.env.DB_USER}, Port=${process.env.DB_PORT}`);
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
