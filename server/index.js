@@ -12,7 +12,7 @@ app.use(express.json());
 const bcrypt = require('bcryptjs');
 
 // Register Endpoint
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -38,7 +38,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Login Endpoint
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     const { name, password } = req.body;
 
     if (!name || !password) {
