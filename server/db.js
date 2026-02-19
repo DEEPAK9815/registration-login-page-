@@ -17,6 +17,12 @@ if (fs.existsSync(envPath)) {
 }
 
 console.log(`[DEBUG] DB Config State: Host=${process.env.DB_HOST ? 'Set' : 'Unset'}, User=${process.env.DB_USER}, Port=${process.env.DB_PORT}`);
+console.log(`[DEBUG] Current Working Directory: ${process.cwd()}`);
+
+if (!process.env.DB_HOST) {
+    console.error("FATAL ERROR: DB_HOST is missing. .env file not loaded?");
+    // Do not exit, but warn heavily. Connection will fail.
+}
 
 const dbConfig = {
     host: process.env.DB_HOST,
