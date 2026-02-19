@@ -21,8 +21,13 @@ const Register = () => {
             const status = err.response?.status;
             const data = err.response?.data;
             const msg = data?.message || err.message;
-            const detail = data?.error ? ` (${data.error})` : '';
-            setError(`Failed (${status || 'Network'}): ${msg}${detail}. Check console for details.`);
+            // Safe stringify for detail
+            let detail = '';
+            if (data?.error) {
+                detail = typeof data.error === 'object' ? ` (${JSON.stringify(data.error)})` : ` (${data.error})`;
+            }
+
+            setError(`Failed (${status || 'Network'}): ${msg}${detail}. Check console.`);
         }
     };
 
