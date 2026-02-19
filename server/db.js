@@ -19,12 +19,7 @@ if (fs.existsSync(envPath)) {
 console.log(`[DEBUG] DB Config State: Host=${process.env.DB_HOST ? 'Set' : 'Unset'}, User=${process.env.DB_USER}, Port=${process.env.DB_PORT}`);
 console.log(`[DEBUG] Current Working Directory: ${process.cwd()}`);
 
-if (!process.env.DB_HOST) {
-    console.error("FATAL ERROR: DB_HOST is missing. .env file not loaded?");
-    // Do not exit, but warn heavily. Connection will fail.
-}
-
-const dbConfig = {
+let dbConfig = {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -37,6 +32,22 @@ const dbConfig = {
         rejectUnauthorized: false
     }
 };
+
+// Start: Local Config Bypass
+const localConfigPath = path.join(__dirname, 'local_config.js');
+if (fs.existsSync(localConfigPath)) {
+    console.log("[DEBUG] Found local_config.js. Using hardcoded override.");
+    const localConfig = require('./local_config');
+    dbConfig = { ...dbConfig, ...localConfig };
+}
+// End: Local Config Bypass
+
+if (!dbConfig.host) {
+    console.error("FATAL ERROR: DB_HOST is missing. .env file not loaded and no local_config.js found.");
+    // Do not exit, but warn heavily. Connection will fail.
+} else {
+    console.log(`[DEBUG] Final DB Host: ${dbConfig.host}`);
+}
 
 const pool = mysql.createPool(dbConfig);
 const promisePool = pool.promise();
