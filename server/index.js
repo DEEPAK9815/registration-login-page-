@@ -17,6 +17,28 @@ app.use((req, res, next) => {
     next();
 });
 
+// Initialize Database Table on Startup
+const initDb = async () => {
+    try {
+        const createTableQuery = `
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL UNIQUE,
+                email VARCHAR(255) NOT NULL UNIQUE,
+                phone VARCHAR(20) NOT NULL,
+                password VARCHAR(255) NOT NULL
+            )
+        `;
+        await db.query(createTableQuery);
+        console.log("[STARTUP] 'users' table initialized/verified successfully.");
+    } catch (error) {
+        console.error("[STARTUP] Error initializing database table:", error);
+    }
+};
+
+// Run DB Init
+initDb();
+
 const bcrypt = require('bcryptjs');
 
 // Register Endpoint
@@ -90,6 +112,14 @@ app.use((req, res, next) => {
     console.log(`404 Error: Route not found: ${req.method} ${req.url}`);
     res.status(404).json({ message: `Route not found: ${req.method} ${req.url}` });
 });
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error("[Uncaught Exception]", err);
+    res.status(500).json({ message: 'Internal Server Error', error: err.message, stack: err.stack });
+});
+
+
 
 if (process.env.NODE_ENV !== 'production') {
     app.listen(port, () => {
