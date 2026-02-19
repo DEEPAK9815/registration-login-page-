@@ -12,7 +12,7 @@ const Login = () => {
         e.preventDefault();
         setError('');
         try {
-            await axios.post('http://localhost:3000/login', { username, password });
+            await axios.post('/api/login', { username, password });
             // Redirect to Netflix landing page on success
             window.location.href = 'https://movie-app-phi-ten-41.vercel.app/';
         } catch (err) {
