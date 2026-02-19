@@ -17,7 +17,7 @@ const Register = () => {
             await axios.post('/api/register', { name, email, password });
             navigate('/login');
         } catch (err) {
-            setError(err.response?.data?.message || 'Registration failed');
+            setError(err.response?.data?.message ? `${err.response.data.message}: ${err.response.data.error || ''}` : 'Registration failed');
         }
     };
 
