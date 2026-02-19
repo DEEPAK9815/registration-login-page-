@@ -66,6 +66,12 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// 404 Handler for debugging
+app.use((req, res, next) => {
+    console.log(`404 Error: Route not found: ${req.method} ${req.url}`);
+    res.status(404).json({ message: `Route not found: ${req.method} ${req.url}` });
+});
+
 if (process.env.NODE_ENV !== 'production') {
     app.listen(port, () => {
         console.log(`Server running on port ${port}`);
