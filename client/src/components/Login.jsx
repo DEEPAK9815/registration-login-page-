@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
-    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
@@ -12,7 +12,7 @@ const Login = () => {
         e.preventDefault();
         setError('');
         try {
-            await axios.post('/api/login', { username, password });
+            await axios.post('/api/login', { name, password });
             // Redirect to Netflix landing page on success
             window.location.href = 'https://movie-app-phi-ten-41.vercel.app/';
         } catch (err) {
@@ -27,9 +27,9 @@ const Login = () => {
             <form onSubmit={handleLogin}>
                 <input
                     type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="glass-input"
                     required
                 />
