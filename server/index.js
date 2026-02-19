@@ -102,13 +102,28 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Debug Config Endpoint -> Checks if Env Vars are loaded in Vercel
+app.get('/api/debug-config', (req, res) => {
+    res.json({
+        message: 'Config Debug Check',
+        env: {
+            DB_HOST: process.env.DB_HOST ? 'Set' : 'MISSING',
+            DB_USER: process.env.DB_USER ? 'Set' : 'MISSING',
+            DB_PASSWORD: process.env.DB_PASSWORD ? 'Set' : 'MISSING',
+            DB_NAME: process.env.DB_NAME ? 'Set' : 'MISSING',
+            DB_PORT: process.env.DB_PORT ? 'Set' : 'MISSING',
+        },
+        cwd: process.cwd()
+    });
+});
+
 // Test DB Endpoint
 app.get('/api/test-db', async (req, res) => {
     try {
         await db.query('SELECT 1');
         res.json({ message: 'Database connection successful', config: { host: process.env.DB_HOST, user: process.env.DB_USER } });
     } catch (error) {
-        res.status(500).json({ message: 'Database connection failed', error: error.message });
+        res.status(500).json({ message: 'Database connection failed', error: error.message, stack: error.stack });
     }
 });
 
