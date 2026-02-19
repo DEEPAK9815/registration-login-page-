@@ -44,7 +44,10 @@ const bcrypt = require('bcryptjs');
 // Register Endpoint
 app.post('/api/register', async (req, res) => {
     console.log("[API] /api/register called with body:", req.body);
-    const { name, email, phone, password } = req.body;
+    let { name, email, phone, password } = req.body;
+
+    if (name) name = name.trim();
+    if (email) email = email.trim();
 
     if (!name || !email || !phone || !password) {
         return res.status(400).json({ message: 'Name, email, phone, and password are required' });
@@ -70,7 +73,9 @@ app.post('/api/register', async (req, res) => {
 
 // Login Endpoint
 app.post('/api/login', async (req, res) => {
-    const { name, password } = req.body;
+    let { name, password } = req.body;
+
+    if (name) name = name.trim();
 
     if (!name || !password) {
         return res.status(400).json({ message: 'Name and password are required' });
